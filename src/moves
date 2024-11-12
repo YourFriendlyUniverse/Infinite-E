@@ -1,4 +1,4 @@
-slap: 1
-slice: 5
+slap: [enemy_damage: 1]
+slice: [enemy_damage: 5]
 slime-spit: [enemy_damage: 3],[enemy_status_effects: slowed]
 recoil-strike: [self_damage: 1],[enemy_damage: 2],[enemy_status_effects: paralyzed]
