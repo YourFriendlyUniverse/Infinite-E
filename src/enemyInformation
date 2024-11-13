@@ -1,1 +1,1 @@
-Slime: [hp: 10],[attack: 1],[speed: 90],[moves: slap,slime-spit]
+Slime{[level: 1],[hp: 10],[atk: 1],[speed: 90],[defence: 1],[moves: slap,slime-spit],[loot: sword,slime,lesser-health-potion]}

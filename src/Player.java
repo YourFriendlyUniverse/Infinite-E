@@ -16,10 +16,10 @@ public class Player {
         maxHp = 20;
         hp = maxHp;
         speed = 100;
-        atk = 1;
-        defence = 1;
+        atk = 5;
+        defence = 5;
         exp = 0;
-        level = 5;
+        level = 1;
         moves = new ArrayList<String>();
         moves.add("slap");
     }
@@ -54,10 +54,24 @@ public class Player {
         exp += amount;
     }
 
-    public int getAtk(){
-        return atk;
+    // returns the specified stat of the player
+    public int getStat(String stat){
+        if (stat.equals("hp")) {
+            return hp;
+        }
+        else if (stat.equals("atk")){
+            return atk;
+        }
+        else if (stat.equals("speed")){
+            return speed;
+        }
+        else if (stat.equals("defence")){
+            return defence;
+        }
+        else{
+            System.out.println("You spelled" + stat + "wrong :skull:");
+            return -1;
+        }
     }
-
-
 
 }
