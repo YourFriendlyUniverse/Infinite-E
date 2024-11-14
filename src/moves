@@ -1,4 +1,4 @@
-slap: [enemy_damage: 1]
-slice: [enemy_damage: 5]
-slime-spit: [enemy_damage: 3]
-recoil-strike: [self_damage: 4],[enemy_damage: 10]
+slap: [enemy_damage: 1],[description: "Just a simple slap"]
+slice: [enemy_damage: 5],[description: "Use your knife to slice"]
+slime-spit: [enemy_damage: 3],[description: "Spit slime at the enemy"]
+recoil-strike: [self_damage: 4],[enemy_damage: 10],[description: "Slap the enemy so hard, you also take damage"]

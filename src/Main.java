@@ -15,6 +15,7 @@ public class Main {
         // ##variable and class initialization##
         Player user = new Player("e");
         boolean run = true; // loop variable
+        int encounterCount = 0;
         // all moves and damage
         String[] moves = getFileData("src/moves").toArray(new String[0]);
 
@@ -25,12 +26,11 @@ public class Main {
         String[] enemies = getFileData("src/enemyInformation").toArray(new String[0]);
         Enemy firstEnemy = selectEnemy(0, enemies);
 
-        // loops through all the moves
+        // loops through all the moves and splits them up into names and results with the index numbers corresponding to a move
         for (int i = 0; i < moves.length; i++) {
             // parses the String for the move's name and length
             String moveHappenings = moves[i].substring(moves[i].indexOf(" ") + 1);
             String moveName = moves[i].substring(0, moves[i].indexOf(":"));
-            System.out.println(moveName + ": " + moveHappenings);
             moveNames[i] = moveName;
             moveResults[i] = moveHappenings;
         }
@@ -48,6 +48,25 @@ public class Main {
 
         // tests
         System.out.println(firstEnemy);
+        for (int i = 0; i < moveNames.length; i++){
+            System.out.println(moveNames[i] + " " + moveResults[i]);
+        }
+        // end of tests
+
+        // ## Main Loop ##
+        while (run){
+            // ends game
+            if (user.getStat("hp") <= 0){
+                run = false;
+            }
+            else{
+                System.out.println("What would you like to do?\n1. use a move\n2. inspect the enemy\n3. use an item\n4. run");
+                int input = Integer.parseInt(s.nextLine());
+            }
+        }
+
+        // game end
+        System.out.println("Good job " + user.getName() + "!\nYou made it through " + encounterCount + "encounters!");
 
         s.close();
     }
@@ -129,12 +148,10 @@ public class Main {
                 loot = enemyStats[i].substring(6).split(",");
             }
             else{
-                System.out.println("YOU TYPED SOMETHING WRONG ERROR\nENEMY NUMBER: " + enemyNumber);
+                System.out.println("YOU TYPED SOMETHING WRONG IN THE ENEMYINFORMATION FILE\nENEMY NUMBER: " + enemyNumber);
             }
         }
 
-
-        String[] placeHolder = new String[]{"a", "b"};
         // public Enemy(String name, int level, int hp, int speed, int atk, int defence, String[] moves, String[] loot)
         return new Enemy(name, level, hp, speed, atk, defence, moves, loot);
     }

@@ -24,10 +24,12 @@ public class Player {
         moves.add("slap");
     }
 
+    // reduces the hp by the damage
     public void damageTaken(int damage){
         hp -= damage;
     }
 
+    // updates the specified stat
     public void updateStat(String stat, int amount){
         if (stat.equals("maxHp")){
             maxHp += amount;
@@ -41,17 +43,6 @@ public class Player {
         else if (stat.equals("defence")){
             defence += amount;
         }
-        else{
-            System.out.println("ERROR YOU SPELT" + stat + "INCORRECTLY");
-        }
-    }
-
-    public int getLevel(){
-        return level;
-    }
-
-    public void expIncrease(int amount){
-        exp += amount;
     }
 
     // returns the specified stat of the player
@@ -68,10 +59,22 @@ public class Player {
         else if (stat.equals("defence")){
             return defence;
         }
+        else if (stat.equals("level")){
+            return level;
+        }
         else{
             System.out.println("You spelled" + stat + "wrong :skull:");
             return -1;
         }
+    }
+
+    // increases the exp of the player by the amount
+    public void expIncrease(int amount){
+        exp += amount;
+    }
+
+    public String getName(){
+        return name;
     }
 
 }
