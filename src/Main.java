@@ -51,6 +51,7 @@ public class Main {
         for (int i = 0; i < moveNames.length; i++){
             System.out.println(moveNames[i] + " " + moveResults[i]);
         }
+        System.out.println(moveDescription("slice", moveNames, moveResults));
         // end of tests
 
         // ## Main Loop ##
@@ -60,8 +61,30 @@ public class Main {
                 run = false;
             }
             else{
-                System.out.println("What would you like to do?\n1. use a move\n2. inspect the enemy\n3. use an item\n4. run");
+                // player action selection
+                System.out.println("What would you like to do?\n1. Fight\n2. Check\n3. Item\n4. Mercy");
                 int input = Integer.parseInt(s.nextLine());
+                switch(input){
+                    case 1 -> {
+                        // using a move
+                        System.out.println("What move?");
+                        System.out.println("0. Back");
+                        System.out.print(user.getMoves());
+                        int moveInput = Integer.parseInt(s.nextLine());
+                        if (moveInput - 1 <= user.getStat("movesLength") && moveInput > 0){
+
+                        }
+                    }
+                    case 2 -> {
+                        System.out.println(firstEnemy);
+                    }
+                    case 3 -> {
+                        System.out.println("WORK IN PROGRESS AAAAA");
+                    }
+                    case 4 -> {
+                        System.out.println("lol this isn't Undertale");
+                    }
+                }
             }
         }
 
@@ -159,5 +182,14 @@ public class Main {
     // returns the stat value (prerequisite that name is contained in stat)
     public static int parseStat(String name, String stat){
         return Integer.parseInt(stat.substring(stat.indexOf(name + ": ") + name.length() + 2));
+    }
+
+    // returns a string with the move and its description
+    public static String moveDescription(String move, String[] moveNames, String[] moveDescriptions){
+        int index = 0;
+        while (!moveNames[index].contains(move)){
+            index++;
+        }
+        return moveNames[index];
     }
 }

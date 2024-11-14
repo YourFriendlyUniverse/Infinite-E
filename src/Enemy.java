@@ -47,27 +47,19 @@ public class Enemy {
         hp -= damage;
     }
 
+    // gets the specified stat of the enemy
     public int getStat(String stat){
-        if (stat.equals("level")){
-            return level;
-        }
-        else if (stat.equals("hp")){
-            return hp;
-        }
-        else if (stat.equals("speed")){
-            return speed;
-        }
-        else if (stat.equals("atk")){
-            return atk;
-        }
-        else if (stat.equals("defence")){
-            return defence;
-        }
-        else{
-            return -1;
-        }
+        return switch (stat) {
+            case "level" -> level;
+            case "hp" -> hp;
+            case "speed" -> speed;
+            case "atk" -> atk;
+            case "defence" -> defence;
+            default -> -1;
+        };
     }
 
+    // returns a string of all the enemy's stats
     public String toString(){
         return "name: " + name + ", hp: " + getHpFraction() + ", speed: " + speed + ", atk: " + atk + ", defence: " + defence;
     }

@@ -47,25 +47,15 @@ public class Player {
 
     // returns the specified stat of the player
     public int getStat(String stat){
-        if (stat.equals("hp")) {
-            return hp;
-        }
-        else if (stat.equals("atk")){
-            return atk;
-        }
-        else if (stat.equals("speed")){
-            return speed;
-        }
-        else if (stat.equals("defence")){
-            return defence;
-        }
-        else if (stat.equals("level")){
-            return level;
-        }
-        else{
-            System.out.println("You spelled" + stat + "wrong :skull:");
-            return -1;
-        }
+        return switch (stat) {
+            case "hp" -> hp;
+            case "atk" -> atk;
+            case "speed" -> speed;
+            case "defence" -> defence;
+            case "level" -> level;
+            case "movesLength" -> moves.toArray().length;
+            default -> -1;
+        };
     }
 
     // increases the exp of the player by the amount
@@ -73,8 +63,16 @@ public class Player {
         exp += amount;
     }
 
+    // returns the player's name
     public String getName(){
         return name;
     }
 
+    public String getMoves(){
+        String movesList = "";
+        for (int i = 0; i < moves.toArray().length; i++){
+            movesList += (i + 1) + ". " + moves.get(i) + "\n";
+        }
+        return movesList;
+    }
 }
