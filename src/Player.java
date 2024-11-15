@@ -20,7 +20,7 @@ public class Player {
         defence = 5;
         exp = 0;
         level = 1;
-        moves = new ArrayList<String>();
+        moves = new ArrayList<>();
         moves.add("slap");
     }
 
@@ -68,11 +68,12 @@ public class Player {
         return name;
     }
 
-    public String getMoves(){
-        String movesList = "";
-        for (int i = 0; i < moves.toArray().length; i++){
-            movesList += (i + 1) + ". " + moves.get(i) + "\n";
+    // returns an array of all the player's moves' names
+    public String[] getMoves(){
+        String[] moveNames = new String[moves.toArray().length];
+        for (int i = 0; i < moveNames.length; i++){
+            moveNames[i] = moves.get(i);
         }
-        return movesList;
+        return moveNames;
     }
 }

@@ -16,6 +16,7 @@ public class Main {
         Player user = new Player("e");
         boolean run = true; // loop variable
         int encounterCount = 0;
+        String[] playerMoves = user.getMoves();
         // all moves and damage
         String[] moves = getFileData("src/moves").toArray(new String[0]);
 
@@ -24,7 +25,7 @@ public class Main {
 
         // enemy list
         String[] enemies = getFileData("src/enemyInformation").toArray(new String[0]);
-        Enemy firstEnemy = selectEnemy(0, enemies);
+        Enemy currentEnemy = selectEnemy(0, enemies);
 
         // loops through all the moves and splits them up into names and results with the index numbers corresponding to a move
         for (int i = 0; i < moves.length; i++) {
@@ -47,11 +48,14 @@ public class Main {
 //        System.out.println(damage);
 
         // tests
-        System.out.println(firstEnemy);
-        for (int i = 0; i < moveNames.length; i++){
-            System.out.println(moveNames[i] + " " + moveResults[i]);
-        }
+//        System.out.println(currentEnemy);
+//        for (int i = 0; i < moveNames.length; i++){
+//            System.out.println(moveNames[i] + " " + moveResults[i]);
+//        }
+        System.out.println(moveDescription("slap", moveNames, moveResults));
         System.out.println(moveDescription("slice", moveNames, moveResults));
+        System.out.println(moveDescription("slime-spit", moveNames, moveResults));
+        System.out.println(moveDescription("recoil-strike", moveNames, moveResults));
         // end of tests
 
         // ## Main Loop ##
@@ -64,19 +68,31 @@ public class Main {
                 // player action selection
                 System.out.println("What would you like to do?\n1. Fight\n2. Check\n3. Item\n4. Mercy");
                 int input = Integer.parseInt(s.nextLine());
+                boolean actionDone = false;
+                int playerMoveSelectedIndex = 0;
+                String enemyMoveSelectedString = "";
                 switch(input){
                     case 1 -> {
                         // using a move
                         System.out.println("What move?");
                         System.out.println("0. Back");
-                        System.out.print(user.getMoves());
-                        int moveInput = Integer.parseInt(s.nextLine());
-                        if (moveInput - 1 <= user.getStat("movesLength") && moveInput > 0){
 
+                        // prints out the player's moves
+                        for (int i = 0; i < playerMoves.length; i++){
+                            System.out.println(i + 1 + ". " + playerMoves[i] + moveDescription(playerMoves[i], moveNames, moveResults));
+                        }
+                        int moveInput = Integer.parseInt(s.nextLine());
+                        moveInput--;
+                        // uses the move if it corresponds to a move the user can make
+                        if (moveInput <= user.getStat("movesLength") && moveInput >= 0){
+                            System.out.println(user.getName() + " used " + playerMoves[moveInput] + "!");
+                            playerMoveSelectedIndex = moveInput;
+                            actionDone = true;
                         }
                     }
                     case 2 -> {
-                        System.out.println(firstEnemy);
+                        System.out.println(currentEnemy);
+                        actionDone = true;
                     }
                     case 3 -> {
                         System.out.println("WORK IN PROGRESS AAAAA");
@@ -84,6 +100,36 @@ public class Main {
                     case 4 -> {
                         System.out.println("lol this isn't Undertale");
                     }
+
+                }
+                // if the player has done an action
+                if (actionDone){
+                    enemyMoveSelectedString = currentEnemy.selectMove();
+                    System.out.println(currentEnemy.getName() + " selected " + enemyMoveSelectedString);
+
+                    // prints out what happens during a turn
+                    if (currentEnemy.getStat("speed") > user.getStat("speed")){
+                        System.out.println("enemy action");
+                        // check player hp
+                        System.out.println("player action");
+                    }
+                    else{
+                        System.out.println("player action");
+                        // check enemy hp
+                        System.out.println("enemy action");
+                    }
+
+                    // check player and enemy hp
+                    if (user.getStat("hp") <= 0){
+                        run = false;
+                        // ends the run
+                    }
+                    else if (currentEnemy.getStat("hp") <= 0) {
+                        System.out.println("round advance!");
+                        encounterCount++;
+                        // advances to the next encounter
+                    }
+                    actionDone = false;
                 }
             }
         }
@@ -165,10 +211,10 @@ public class Main {
                 defence = parseStat("defence", enemyStats[i]);
             }
             else if (enemyStats[i].contains("moves: ")){
-                moves = enemyStats[i].substring(6).split(",");
+                moves = enemyStats[i].substring(7).split(",");
             }
             else if (enemyStats[i].contains("loot: ")){
-                loot = enemyStats[i].substring(6).split(",");
+                loot = enemyStats[i].substring(7).split(",");
             }
             else{
                 System.out.println("YOU TYPED SOMETHING WRONG IN THE ENEMYINFORMATION FILE\nENEMY NUMBER: " + enemyNumber);
@@ -185,11 +231,42 @@ public class Main {
     }
 
     // returns a string with the move and its description
-    public static String moveDescription(String move, String[] moveNames, String[] moveDescriptions){
+    public static String moveDescription(String move, String[] moveNames, String[] moveOutcomes){
         int index = 0;
+        // finds the move's index to use
         while (!moveNames[index].contains(move)){
             index++;
         }
-        return moveNames[index];
+        // splits into an array of all the results and description for the move
+        String[] moveResults = moveOutcomes[index].split("],\\[");
+        // removes the first and last brackets to standardize how the description and results are stored
+        moveResults[0] = moveResults[0].substring(1);
+        moveResults[moveResults.length - 1] = moveResults[moveResults.length - 1].substring(0, moveResults[moveResults.length - 1].indexOf("]"));
+
+        String power = "";
+        String selfDamage = "";
+        // finds the self damage and power of the move if the move has them
+        for (int i = 0; i < moveResults.length; i++){
+            if (moveResults[i].contains("enemy_damage: ")){
+                power = "   " + moveResults[i].substring(moveResults[i].indexOf(": ") + 2) + " power";
+            }
+            else if (moveResults[i].contains("self_damage: ")){
+                selfDamage = moveResults[i].substring(moveResults[i].indexOf(": ") + 2) + " self damage";
+            }
+        }
+
+        // returns the description of the move along with the power and self damage, depending on what the move has
+        for (int i = 0; i < moveResults.length; i++){
+            if (moveResults[i].contains("description: ") && power.contains("power") && selfDamage.contains("self damage")){
+                return "\n   " + moveResults[i].substring(moveResults[i].indexOf("\"")) + "\n" + power + ", " + selfDamage;
+            }
+            else if (moveResults[i].contains("description: ") && power.contains("power")){
+                return "\n   " + moveResults[i].substring(moveResults[i].indexOf("\"")) + "\n" + power;
+            }
+            else if (moveResults[i].contains("description: ")){
+                return "\n   " + moveResults[i].substring(moveResults[i].indexOf("\""));
+            }
+        }
+        return "Error Description not found";
     }
 }

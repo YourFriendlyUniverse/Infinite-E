@@ -59,6 +59,10 @@ public class Enemy {
         };
     }
 
+    public String getName(){
+        return name;
+    }
+
     // returns a string of all the enemy's stats
     public String toString(){
         return "name: " + name + ", hp: " + getHpFraction() + ", speed: " + speed + ", atk: " + atk + ", defence: " + defence;
