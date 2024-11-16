@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -11,17 +10,20 @@ public class Main {
         // player welcome and name selection
 //        System.out.print("Welcome player to Infinite E, please type your name: ");
 //        String name = s.nextLine();
+        Player user = new Player("e");
 
         // ##variable and class initialization##
-        Player user = new Player("e");
+  
         boolean run = true; // loop variable
         int encounterCount = 0;
-        String[] playerMoves = user.getMoves();
+
         // all moves and damage
         String[] moves = getFileData("src/moves").toArray(new String[0]);
-
         String[] moveNames = new String[moves.length];
         String[] moveResults = new String[moves.length];
+
+        // player moves
+        String[] playerMoves = user.getMoves();
 
         // enemy list
         String[] enemies = getFileData("src/enemyInformation").toArray(new String[0]);
@@ -36,6 +38,8 @@ public class Main {
             moveResults[i] = moveHappenings;
         }
 
+        // tests
+
         // move happenings
 //        int move = Integer.parseInt(s.nextLine());
 //        System.out.println(moveNames[move]);
@@ -47,15 +51,15 @@ public class Main {
 //        int damage = (int) ((((2 * user.getLevel()) / 5 + 2 ) * moveDamage(moveResults[move]) * (5 / 1)) / 20) + 2;
 //        System.out.println(damage);
 
-        // tests
-//        System.out.println(currentEnemy);
-//        for (int i = 0; i < moveNames.length; i++){
-//            System.out.println(moveNames[i] + " " + moveResults[i]);
-//        }
-        System.out.println(moveDescription("slap", moveNames, moveResults));
-        System.out.println(moveDescription("slice", moveNames, moveResults));
-        System.out.println(moveDescription("slime-spit", moveNames, moveResults));
-        System.out.println(moveDescription("recoil-strike", moveNames, moveResults));
+
+        // System.out.println(currentEnemy);
+        // for (int i = 0; i < moveNames.length; i++){
+        //     System.out.println(moveNames[i] + " " + moveResults[i]);
+        // }
+        // System.out.println(moveDescription("slap", moveNames, moveResults));
+        // System.out.println(moveDescription("slice", moveNames, moveResults));
+        // System.out.println(moveDescription("slime-spit", moveNames, moveResults));
+        // System.out.println(moveDescription("recoil-strike", moveNames, moveResults));
         // end of tests
 
         // ## Main Loop ##
@@ -69,8 +73,10 @@ public class Main {
                 System.out.println("What would you like to do?\n1. Fight\n2. Check\n3. Item\n4. Mercy");
                 int input = Integer.parseInt(s.nextLine());
                 boolean actionDone = false;
+                boolean playerUsedMove = false;
                 int playerMoveSelectedIndex = 0;
                 String enemyMoveSelectedString = "";
+                int enemyMoveSelectedIndex = 0;
                 switch(input){
                     case 1 -> {
                         // using a move
@@ -83,11 +89,17 @@ public class Main {
                         }
                         int moveInput = Integer.parseInt(s.nextLine());
                         moveInput--;
+
                         // uses the move if it corresponds to a move the user can make
                         if (moveInput <= user.getStat("movesLength") && moveInput >= 0){
-                            System.out.println(user.getName() + " used " + playerMoves[moveInput] + "!");
-                            playerMoveSelectedIndex = moveInput;
+                            // gets the global id of the move
+                            for (int i = 0; i < moveNames.length; i++){
+                                if (moveNames[i].contains(playerMoves[moveInput])){
+                                    playerMoveSelectedIndex = i;
+                                }
+                            }
                             actionDone = true;
+                            playerUsedMove = true;
                         }
                     }
                     case 2 -> {
@@ -102,22 +114,48 @@ public class Main {
                     }
 
                 }
-                // if the player has done an action
-                if (actionDone){
-                    enemyMoveSelectedString = currentEnemy.selectMove();
-                    System.out.println(currentEnemy.getName() + " selected " + enemyMoveSelectedString);
 
-                    // prints out what happens during a turn
+                // enemy move select
+                enemyMoveSelectedString = currentEnemy.selectMove();
+                System.out.println(currentEnemy.getName() + " selected " + enemyMoveSelectedString);
+                // gets the global id of the move the enemy selected
+                for (int i = 0; i < moveNames.length; i++){
+                    if (moveNames[i].contains(enemyMoveSelectedString)){
+                        enemyMoveSelectedIndex = i;
+                    }
+                }
+
+                // if the player has done an action and used a move
+                if (actionDone && playerUsedMove){
+                    // checks who goes first and prints out what happens during a turn
                     if (currentEnemy.getStat("speed") > user.getStat("speed")){
                         System.out.println("enemy action");
+                        // update player h  p
                         // check player hp
-                        System.out.println("player action");
+                        if (user.getStat("hp") > 0){
+                            System.out.println("player action");
+                        }
+
                     }
                     else{
-                        System.out.println("player action");
+                        // calculates how much damage the player does to the enemy
+                        int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                        System.out.println(user.getName() + " used " + playerMoves[playerMoveSelectedIndex] + "!");
+                        System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
+                        // update enemy hp
+                        currentEnemy.damageTaken(enemyDamageTaken);
                         // check enemy hp
-                        System.out.println("enemy action");
+                        System.out.println(currentEnemy.getHpFraction());
+                        if (currentEnemy.getStat("hp") > 0){
+                            int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                            user.damageTaken(playerDamageTaken);
+                            System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
+                            System.out.println(currentEnemy.getName() + " did " + playerDamageTaken + " damage!" );
+                            System.out.println(user.getStat("hp"));
+
+                        }
                     }
+
 
                     // check player and enemy hp
                     if (user.getStat("hp") <= 0){
@@ -128,8 +166,10 @@ public class Main {
                         System.out.println("round advance!");
                         encounterCount++;
                         // advances to the next encounter
-                    }
-                    actionDone = false;
+                    }                    
+                }      
+                else if (actionDone){
+                    System.out.println("enemy action");
                 }
             }
         }
@@ -268,5 +308,11 @@ public class Main {
             }
         }
         return "Error Description not found";
+    }
+    
+    // returns the amount of damage a move does
+    public static int damageDone(int attackerLevel, int attackerAtk, int movePower,int defenderDefence){
+        double modifier = (Math.round((Math.random() * 0.30 + 0.85) * 100) / (double) 100); // randomized value from 0.85 to 1.15 (inclusive)
+        return (int) (((((2 * attackerLevel) / 5 + 2 ) * movePower * (attackerAtk / defenderDefence)) / 25) + 2 * modifier);
     }
 }

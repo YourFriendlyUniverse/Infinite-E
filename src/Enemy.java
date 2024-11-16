@@ -39,7 +39,12 @@ public class Enemy {
 
     // returns a string of the enemy's current hp over their max hp
     public String getHpFraction(){
-        return hp + "/" + maxHp;
+        if (hp >= 0){
+            return hp + "/" + maxHp;
+        }
+        else{
+            return 0 + "/" + maxHp;
+        }
     }
 
     // subtracts hp by damage

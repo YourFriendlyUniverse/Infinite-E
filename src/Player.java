@@ -16,7 +16,7 @@ public class Player {
         maxHp = 20;
         hp = maxHp;
         speed = 100;
-        atk = 5;
+        atk = 20;
         defence = 5;
         exp = 0;
         level = 1;
