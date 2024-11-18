@@ -31,17 +31,11 @@ public class Player {
 
     // updates the specified stat
     public void updateStat(String stat, int amount){
-        if (stat.equals("maxHp")){
-            maxHp += amount;
-        }
-        else if (stat.equals("speed")) {
-            speed += amount;
-        }
-        else if (stat.equals("atk")){
-            atk += amount;
-        }
-        else if (stat.equals("defence")){
-            defence += amount;
+        switch (stat) {
+            case "maxHp" -> maxHp += amount;
+            case "speed" -> speed += amount;
+            case "atk" -> atk += amount;
+            case "defence" -> defence += amount;
         }
     }
 
@@ -56,6 +50,10 @@ public class Player {
             case "movesLength" -> moves.toArray().length;
             default -> -1;
         };
+    }
+
+    public void addMove(String move){
+        moves.add(move);
     }
 
     // increases the exp of the player by the amount
@@ -75,5 +73,14 @@ public class Player {
             moveNames[i] = moves.get(i);
         }
         return moveNames;
+    }
+
+    // returns player's current hp as a fraction of their max hp
+    public String getHpFraction(){
+        return getStat("hp") + "/" + maxHp;
+    }
+
+    public String toString(){
+        return "\"" + name + "\"\nLevel: " + level + "\nExp: " + exp + "\nAtk: " + atk + "\nDefence: " + defence + "\nSpeed: "  + speed + "\n\"You, The player\"";
     }
 }

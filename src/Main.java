@@ -10,12 +10,12 @@ public class Main {
         // player welcome and name selection
 //        System.out.print("Welcome player to Infinite E, please type your name: ");
 //        String name = s.nextLine();
-        Player user = new Player("e");
+        Player user = new Player("player");
 
         // ##variable and class initialization##
   
         boolean run = true; // loop variable
-        int encounterCount = 0;
+        int encounterCount = 1;
 
         // all moves and damage
         String[] moves = getFileData("src/moves").toArray(new String[0]);
@@ -37,6 +37,11 @@ public class Main {
             moveNames[i] = moveName;
             moveResults[i] = moveHappenings;
         }
+
+        // player welcome
+        System.out.println("Welcome " + user.getName() + " to Infinite-E");
+        System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
+
 
         // tests
 
@@ -68,6 +73,7 @@ public class Main {
             if (user.getStat("hp") <= 0){
                 run = false;
             }
+            // if the game hasn't ended
             else{
                 // player action selection
                 System.out.println("What would you like to do?\n1. Fight\n2. Check\n3. Item\n4. Mercy");
@@ -75,8 +81,10 @@ public class Main {
                 boolean actionDone = false;
                 boolean playerUsedMove = false;
                 int playerMoveSelectedIndex = 0;
-                String enemyMoveSelectedString = "";
+                String enemyMoveSelectedString;
                 int enemyMoveSelectedIndex = 0;
+                boolean roundAdvance = false;
+                int nextLevelExpRequired = (int) (user.getStat("level") * 1.15 + Math.pow(user.getStat("level"), 1.1) + 100);
                 switch(input){
                     case 1 -> {
                         // using a move
@@ -103,8 +111,16 @@ public class Main {
                         }
                     }
                     case 2 -> {
-                        System.out.println(currentEnemy);
-                        actionDone = true;
+                        System.out.println("Whomst does thou wish to check?");
+                        System.out.println("0. Back\n1. " + user.getName() + "\n2. " + currentEnemy.getName());
+                        int checkAction = Integer.parseInt(s.nextLine());
+                        if (checkAction == 1){
+                            System.out.println(user);
+                        }
+                        else if (checkAction == 2){
+                            System.out.println(currentEnemy);
+                            actionDone = true;
+                        }
                     }
                     case 3 -> {
                         System.out.println("WORK IN PROGRESS AAAAA");
@@ -117,7 +133,6 @@ public class Main {
 
                 // enemy move select
                 enemyMoveSelectedString = currentEnemy.selectMove();
-                System.out.println(currentEnemy.getName() + " selected " + enemyMoveSelectedString);
                 // gets the global id of the move the enemy selected
                 for (int i = 0; i < moveNames.length; i++){
                     if (moveNames[i].contains(enemyMoveSelectedString)){
@@ -129,13 +144,23 @@ public class Main {
                 if (actionDone && playerUsedMove){
                     // checks who goes first and prints out what happens during a turn
                     if (currentEnemy.getStat("speed") > user.getStat("speed")){
-                        System.out.println("enemy action");
-                        // update player h  p
+                        // calculates how much damage the enemy did to the player
+                        int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                        // updates player hp
+                        user.damageTaken(playerDamageTaken);
+                        System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
+                        System.out.println(currentEnemy.getName() + " did " + playerDamageTaken + " damage!");
+                        System.out.println("You're at " + user.getHpFraction() + " hp");
                         // check player hp
-                        if (user.getStat("hp") > 0){
-                            System.out.println("player action");
+                        if (user.getStat("hp") > 0) {
+                            // calculates how much damage the player does to the enemy
+                            int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                            System.out.println(user.getName() + " used " + playerMoves[playerMoveSelectedIndex] + "!");
+                            System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
+                            // update enemy hp
+                            currentEnemy.damageTaken(enemyDamageTaken);
+                            System.out.println(currentEnemy.getHpFraction());
                         }
-
                     }
                     else{
                         // calculates how much damage the player does to the enemy
@@ -144,14 +169,15 @@ public class Main {
                         System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
                         // update enemy hp
                         currentEnemy.damageTaken(enemyDamageTaken);
-                        // check enemy hp
                         System.out.println(currentEnemy.getHpFraction());
+                        // check enemy hp
                         if (currentEnemy.getStat("hp") > 0){
+                            // calculates how much damage the enemy does to the player
                             int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
                             user.damageTaken(playerDamageTaken);
                             System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
                             System.out.println(currentEnemy.getName() + " did " + playerDamageTaken + " damage!" );
-                            System.out.println(user.getStat("hp"));
+                            System.out.println("You're at " + user.getHpFraction() + " hp");
 
                         }
                     }
@@ -163,19 +189,45 @@ public class Main {
                         // ends the run
                     }
                     else if (currentEnemy.getStat("hp") <= 0) {
-                        System.out.println("round advance!");
                         encounterCount++;
+                        roundAdvance = true;
                         // advances to the next encounter
                     }                    
                 }      
                 else if (actionDone){
-                    System.out.println("enemy action");
+                    // calculates how much damage the enemy did to the player
+                    int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                    // updates player hp
+                    user.damageTaken(playerDamageTaken);
+                    System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
+                    System.out.println(currentEnemy.getName() + " did " + playerDamageTaken + " damage!");
+                    System.out.println("You're at " + user.getHpFraction() + " hp");
+                    // checks player and enemy hp
+                    if (user.getStat("hp") <= 0){
+                        run = false;
+                        // ends the run
+                    }
+                    else if (currentEnemy.getStat("hp") <= 0) {
+                        encounterCount++;
+                        roundAdvance = true;
+                        // advances to the next encounter
+                    }
+                }
+                // advances to the next enemy
+                if (roundAdvance){
+                    // congrats
+                    System.out.println("You defeated the " + currentEnemy.getName() + "!");
+                    System.out.println("Round advance!");
+                    // generates the next enemy and tells user what the enemy is
+                    int randEnemy = (int) (Math.random() * enemies.length);
+                    currentEnemy = selectEnemy(randEnemy, enemies);
+                    System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
                 }
             }
         }
 
         // game end
-        System.out.println("Good job " + user.getName() + "!\nYou made it through " + encounterCount + "encounters!");
+        System.out.println("Good job " + user.getName() + "!\nYou made it through " + encounterCount + " encounters!");
 
         s.close();
     }
