@@ -1,3 +1,5 @@
+import jdk.jshell.Snippet;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -38,6 +40,37 @@ public class Main {
             moveResults[i] = moveHappenings;
         }
 
+        // all in between round rewards
+        String[] roundRewards = getFileData("src/roundUpgrades").toArray(new String[0]);
+        String[] rewardName = new String[roundRewards.length];
+        String[] rewardData = new String[roundRewards.length];
+        int[] rewardMax = new int[roundRewards.length];
+
+        // loops through all round rewards and splits them into name and data, with the index number corresponding to a specific reward
+        for (int i = 0; i < roundRewards.length; i++){
+            rewardName[i] = roundRewards[i].substring(0,roundRewards[i].indexOf("{"));
+            rewardData[i] = roundRewards[i].substring(roundRewards[i].indexOf("{") + 1, roundRewards[i].length() - 1);
+        }
+
+        // sets default max value for items
+        for (int i = 0; i < rewardMax.length; i++){
+            rewardMax[i] = 2147483647;
+        }
+
+        // sets the max for all the rewards
+        for (int i = 0; i < rewardData.length; i++){
+            // splits and standardizes by removing last and first brackets
+            String[] currentRewardData = rewardData[i].split("],\\[");
+            currentRewardData[0] = currentRewardData[0].substring(1);
+            currentRewardData[currentRewardData.length - 1] = currentRewardData[currentRewardData.length - 1].substring(0, currentRewardData[currentRewardData.length - 1].length() - 1);
+            for (int j = 0; j < currentRewardData.length; j++){
+                if (currentRewardData[j].contains("max: ")){
+                    rewardMax[i] = Integer.parseInt(currentRewardData[j].substring(5));
+                }
+            }
+        }
+
+
         // player welcome
         System.out.println("Welcome " + user.getName() + " to Infinite-E");
         System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
@@ -65,6 +98,8 @@ public class Main {
         // System.out.println(moveDescription("slice", moveNames, moveResults));
         // System.out.println(moveDescription("slime-spit", moveNames, moveResults));
         // System.out.println(moveDescription("recoil-strike", moveNames, moveResults));
+//        System.out.println(upgradeInfo(rewardName[1], rewardData[1]));
+
         // end of tests
 
         // ## Main Loop ##
@@ -159,7 +194,7 @@ public class Main {
                             System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
                             // update enemy hp
                             currentEnemy.damageTaken(enemyDamageTaken);
-                            System.out.println(currentEnemy.getHpFraction());
+                            System.out.println(currentEnemy.getName() + " is at " + currentEnemy.getHpFraction());
                         }
                     }
                     else{
@@ -169,7 +204,7 @@ public class Main {
                         System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
                         // update enemy hp
                         currentEnemy.damageTaken(enemyDamageTaken);
-                        System.out.println(currentEnemy.getHpFraction());
+                        System.out.println(currentEnemy.getName() + " is at " + currentEnemy.getHpFraction());
                         // check enemy hp
                         if (currentEnemy.getStat("hp") > 0){
                             // calculates how much damage the enemy does to the player
@@ -218,6 +253,9 @@ public class Main {
                     // congrats
                     System.out.println("You defeated the " + currentEnemy.getName() + "!");
                     System.out.println("Round advance!");
+                    // select 1 of 4 random upgrade items whose max is not 0
+
+
                     // generates the next enemy and tells user what the enemy is
                     int randEnemy = (int) (Math.random() * enemies.length);
                     currentEnemy = selectEnemy(randEnemy, enemies);
@@ -365,6 +403,44 @@ public class Main {
     // returns the amount of damage a move does
     public static int damageDone(int attackerLevel, int attackerAtk, int movePower,int defenderDefence){
         double modifier = (Math.round((Math.random() * 0.30 + 0.85) * 100) / (double) 100); // randomized value from 0.85 to 1.15 (inclusive)
-        return (int) (((((2 * attackerLevel) / 5 + 2 ) * movePower * (attackerAtk / defenderDefence)) / 25) + 2 * modifier);
+        if (movePower > 0){
+            return (int) (((((2 * attackerLevel) / 5 + 2 ) * movePower * (attackerAtk / defenderDefence)) / 25) + 2 * modifier);
+        }
+        return 0;
     }
+
+    public static String upgradeInfo(String upgradeName, String upgradeData){
+        String returnString = upgradeName;
+        // splits and standardizes by removing last and first brackets
+        String[] upgradeResults = upgradeData.split("],\\[");
+        upgradeResults[0] = upgradeResults[0].substring(1);
+        upgradeResults[upgradeResults.length - 1] = upgradeResults[upgradeResults.length - 1].substring(0, upgradeResults[upgradeResults.length - 1].length() - 1);
+        for (int i = 0; i < upgradeResults.length; i++){
+            // adds the move to the string
+            if (upgradeResults[i].contains("move: ")){
+                returnString += "\n   Gives move: " + upgradeResults[i].substring(6);
+            }
+            // adds the stats and their amount to the string
+            else if (upgradeResults[i].contains("stat: ")){
+                // splits and standardizes the stat upgrades
+                String[] statUpgrades = upgradeResults[i].substring(6).split("\\),\\(");
+                statUpgrades[0] = statUpgrades[0].substring(1);
+                statUpgrades[statUpgrades.length - 1] = statUpgrades[statUpgrades.length - 1].substring(0, statUpgrades[statUpgrades.length - 1].length() - 1);
+                // adds the stat name and how much it increases the stat by
+                for (int j = 0; j < statUpgrades.length; j++){
+                    returnString += "\n   " + statUpgrades[j].substring(0, statUpgrades[j].indexOf(",")) + ": ";
+                    int statAmount = Integer.parseInt(statUpgrades[j].substring(statUpgrades[j].indexOf(",") + 1));
+                    // determines whether the stat amount is positive or negative
+                    if (statAmount >= 0){
+                        returnString += "+" + statAmount;
+                    }
+                    else{
+                        returnString += statAmount;
+                    }
+                }
+            }
+        }
+        return returnString;
+    }
+
 }

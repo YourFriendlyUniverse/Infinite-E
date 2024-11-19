@@ -1,7 +1,7 @@
 Slime{[level: 1],[hp: 10],[atk: 1],[speed: 90],[defence: 1],[moves: slap,slime-spit,nothing],[loot: dagger,slime,lesser-health-potion]}
 Goblin{[level: 2],[hp: 5],[atk: 3],[speed: 100],[defence: 3],[moves: dagger-throw,stab],[loot: sword,lesser-health-potion,dagger]}
 Goblin-Rider{[level: 2],[hp: 7],[atk: 3],[speed: 110],[defence: 2],[moves: dagger-throw,stab,bite],[loot: sword,lesser-health-potion,dagger]}
-
+Skeleton{[level: 2],[hp: 5],[atk: 2],[speed: 95],[defence: 3],[moves: bow,stab,slice],[loot: sword,lesser-health-potion,dagger]}
 
 
 E{[level: 32767],[hp: 1000],[atk: 100],[speed: 1000000000],[defence: 1],[moves: /kill-@e,nothing,nothing,nothing],[loot: Infinite-E]}

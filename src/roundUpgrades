@@ -1,0 +1,45 @@
+Sword{[move: slice],[max: 1]}
+Throwing-Dagger{[move: dagger-throw],[stat: (speed,5)],[max: 1]}
+Bow{[move: bow],[max: 1]}
+Dagger{[move: stab],[max: 1]}
+Nyan-Cat{[stat: (atk,10),(defence,10),(speed,10),(maxHp,-5)]}
+Speed-Boots{[stat: (speed,10)]}
+Hermes-Boots{[stat: (speed,25)],[max: 1]}
+Lightning-Boots{[stat: (speed,30)],[max: 1]}
+Rogue-Cloak{[stat: speed,100],[max: 1]}
+Shield{[stat: (defence,10),(speed,-1)]}
+Plate-Armor{[stat: (defence,20),(speed,-10)]}
+Chainmail{[stat: (defence,20)]}
+Grindstone{[stat: (atk,10)]}
+Sharpness{[stat: (atk,15)]}
+Life-Fruit{[stat: (maxHp,10)]}
+Life-Crystal{[stat: (maxHp,40)],[max: 1]}
+Zenith{[stat: (atk,50)],[max: 2]}
+Catnip{[move: cat-attack],[stat: (speed,10)]}
+Speed-Ring{[stat: (speed,10)]}
+Attack-Ring{[stat: (atk,10)]}
+Defence-Ring{[stat: (defence,10)]}
+Health-Ring{[stat: (maxHp,5)]}
+Greater-Speed-Ring{[stat: (speed,15)]}
+Greater-Attack-Ring{[stat: (atk,15)]}
+Greater-Defence-Ring{[stat: (defence,15)]}
+Greater-Health-Ring{[stat: (maxHp,10)]}
+Ring-Of-Fortitude{[stat: (maxHp,10),(defence,15)],[max: 4]}
+Ring-Of-Vengeance{[stat: (atk,15),(speed,15)],[max: 4]}
+Ring-Of-The-Juggernaut{[stat: (atk,20),(speed,20),(defence,20),(maxHp,20)],[max: 2]}
+God's-Wrath{[stat: (atk,50),(speed,25),(maxHp,-10)],[max: 3]}
+Barrier-Of-Protection{[stat: (defence,20)],[max: 3]}
+Seed-Of-Life{[stat: (maxHp,25)],[max: 2]}
+Swift-Sneak{[stat: (speed,10)]}
+Cynical-World{[stat: (atk,200),(defence,-50),(maxHp,-25)],[max: 1]}
+The-Great-Wall{[stat: (atk,-50),(speed,-15),(defence,100),(maxHp,50)],[max: 1]}
+Australia{[stat: (atk,15),(speed,10),(maxHp,10)],[max: 1],[move: spider-dance]}
+Coconut{[stat: (maxHp,5),(speed,10)]}
+Werewolf{[stat: (atk,15),(speed,15),(maxHp,15),(defence,-10)],[max: 1]}
+Sans-Undertale{[stat: (atk,100),(speed,100),(maxHp,-50),(defence,-100)],[max: 1]}
+Guardian-Angel{[stat: (atk,-50),(maxHp,25),(defence,60)],[max: 1]}
+Castle{[stat: (atk,15),(speed,-25),(maxHp,10),(defence,20)]}
+Shard-Of-Glass{[stat: (atk,10),(maxHp,-5)]}
+Brick{[stat: (atk,10),(speed,-5)]}
+Chilli-Pepper{[stat: (atk,15),(speed,10),(maxHp,-5),(defence,-5)]}
+Big-Stick{[stat: (atk,5)],[max: 1],[move: stick-smack]}
