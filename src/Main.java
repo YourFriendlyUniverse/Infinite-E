@@ -484,7 +484,7 @@ public class Main {
     public static int pickRandomReward(int[] rewardMax){
         int index = (int) (Math.random() * rewardMax.length);
         // refreshes until it picks a reward that it can give
-        while (index <= 0){
+        while (rewardMax[index] <= 0){
             index = (int) (Math.random() * rewardMax.length);
         }
         return index;
