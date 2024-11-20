@@ -26,7 +26,13 @@ public class Player {
 
     // reduces the hp by the damage
     public void damageTaken(int damage){
-        hp -= damage;
+        if (hp - damage > maxHp){
+            hp = maxHp;
+        }
+        else{
+            hp -= damage;
+        }
+
     }
 
     // updates the specified stat
@@ -53,6 +59,9 @@ public class Player {
             case "hp" -> {
                 return hp;
             }
+            case "maxHp" -> {
+                return maxHp;
+            }
             case "atk" -> {
                 return atk;
             }
@@ -60,7 +69,7 @@ public class Player {
                 return speed;
             }
             case "defence" -> {
-                if (defence < 0){
+                if (defence <= 0){
                     return 1;
                 }
                 else{

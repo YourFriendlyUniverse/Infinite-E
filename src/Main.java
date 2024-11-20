@@ -158,7 +158,7 @@ public class Main {
                         }
                     }
                     case 3 -> {
-                        int healAmount = (int) (Math.random() * (user.getStat("hp") * 0.70) + (user.getStat("hp") * 0.15));
+                        int healAmount = (int) (Math.random() * (user.getStat("maxHp") * 0.70) + (user.getStat("maxHp") * 0.15));
                         user.damageTaken(healAmount * -1);
                         System.out.println(user.getName() + " healed for " + healAmount + "!");
                         actionDone = true;
