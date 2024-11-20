@@ -6,11 +6,11 @@ public class Enemy {
     private int speed;
     private int atk;
     private int defence;
+    private String description;
     private String[] moves;
-    private String[] loot;
 
 
-    public Enemy(String name, int level, int hp, int speed, int atk, int defence, String[] moves, String[] loot){
+    public Enemy(String name, int level, int hp, int speed, int atk, int defence, String[] moves, String description){
         this.name = name;
         this.level = level;
         this.hp = hp;
@@ -19,17 +19,12 @@ public class Enemy {
         this.atk = atk;
         this.defence = defence;
         this.moves = moves;
-        this.loot = loot;
+        this.description = description;
     }
 
     // randomly selects a move from its move table
     public String selectMove(){
         return moves[(int) (Math.random() * moves.length)];
-    }
-
-    // randomly selects a loot item from its loot table
-    public String itemsDropped(){
-        return loot[(int) (Math.random() * loot.length)];
     }
 
     // gives exp, randomized by a multiplier of 0.85 to 1 (inclusive)
@@ -70,7 +65,7 @@ public class Enemy {
 
     // returns a string of all the enemy's stats
     public String toString(){
-        return "name: " + name + ", hp: " + getHpFraction() + ", speed: " + speed + ", atk: " + atk + ", defence: " + defence;
+        return "name: " + name + ", hp: " + getHpFraction() + ", speed: " + speed + ", atk: " + atk + ", defence: " + defence + "\n" + description;
     }
 
 }

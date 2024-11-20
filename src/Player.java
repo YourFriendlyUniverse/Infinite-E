@@ -32,7 +32,15 @@ public class Player {
     // updates the specified stat
     public void updateStat(String stat, int amount){
         switch (stat) {
-            case "maxHp" -> maxHp += amount;
+            case "maxHp" -> {
+                maxHp += amount;
+                if (hp > maxHp){
+                    hp = maxHp;
+                }
+                else{
+                    hp += amount;
+                }
+            }
             case "speed" -> speed += amount;
             case "atk" -> atk += amount;
             case "defence" -> defence += amount;
@@ -41,15 +49,35 @@ public class Player {
 
     // returns the specified stat of the player
     public int getStat(String stat){
-        return switch (stat) {
-            case "hp" -> hp;
-            case "atk" -> atk;
-            case "speed" -> speed;
-            case "defence" -> defence;
-            case "level" -> level;
-            case "movesLength" -> moves.toArray().length;
-            default -> -1;
-        };
+        switch (stat) {
+            case "hp" -> {
+                return hp;
+            }
+            case "atk" -> {
+                return atk;
+            }
+            case "speed" -> {
+                return speed;
+            }
+            case "defence" -> {
+                if (defence < 0){
+                    return 1;
+                }
+                else{
+                    return defence;
+                }
+
+            }
+            case "level" -> {
+                return level;
+            }
+            case "movesLength" -> {
+                return moves.toArray().length;
+            }
+            default -> {
+                return -1;
+            }
+        }
     }
 
     public void addMove(String move){
@@ -77,10 +105,10 @@ public class Player {
 
     // returns player's current hp as a fraction of their max hp
     public String getHpFraction(){
-        return getStat("hp") + "/" + maxHp;
+        return getStat("hp") + "/" + maxHp + " Hp";
     }
 
     public String toString(){
-        return "\"" + name + "\"\nLevel: " + level + "\nExp: " + exp + "\nAtk: " + atk + "\nDefence: " + defence + "\nSpeed: "  + speed + "\n\"You, The player\"";
+        return "\"" + name + "\"\nLevel: " + level + "\nExp: " + exp + "\nHealth: " + getHpFraction() + "\nAtk: " + atk + "\nDefence: " + defence + "\nSpeed: "  + speed + "\n\"You, The player\"";
     }
 }
