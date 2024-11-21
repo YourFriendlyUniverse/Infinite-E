@@ -72,7 +72,7 @@ public class Main {
         // player welcome
         System.out.println("Welcome " + user.getName() + " to Infinite-E");
         System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
-
+        System.out.println("Enter in a number to select your options");
 
         // tests
 
@@ -111,7 +111,14 @@ public class Main {
             else{
                 // player action selection
                 System.out.println("==================================\nWhat would you like to do?\n1. Fight\n2. Check\n3. Heal\n4. Help");
-                int input = Integer.parseInt(s.nextLine());
+                int input = 0;
+                // makes it so the program doesn't stop when an invalid value is entered
+                try {
+                    input = Integer.parseInt(s.nextLine());
+                }
+                catch (Exception e){
+                    System.out.println("Please enter a valid value");
+                }
                 boolean actionDone = false;
                 boolean playerUsedMove = false;
                 int playerMoveSelectedIndex = 0;
@@ -128,7 +135,14 @@ public class Main {
                         for (int i = 0; i < playerMoves.length; i++){
                             System.out.println(i + 1 + ". " + playerMoves[i] + moveDescription(playerMoves[i], moveNames, moveResults));
                         }
-                        int moveInput = Integer.parseInt(s.nextLine());
+                        int moveInput = 0;
+                        // makes it so the program doesn't stop when an invalid value is entered
+                        try{
+                            moveInput = Integer.parseInt(s.nextLine());
+                        }
+                        catch (Exception e){
+                            System.out.println("Please enter a valid value");
+                        }
                         moveInput--;
 
                         // uses the move if it corresponds to a move the user can make
@@ -146,7 +160,14 @@ public class Main {
                     case 2 -> {
                         System.out.println("Whomst does thou wish to check?");
                         System.out.println("0. Back\n1. " + user.getName() + "\n2. " + currentEnemy.getName());
-                        int checkAction = Integer.parseInt(s.nextLine());
+                        int checkAction = 0;
+                        // makes it so the program doesn't stop when an invalid value is entered
+                        try{
+                            checkAction = Integer.parseInt(s.nextLine());
+                        }
+                        catch (Exception e){
+                            System.out.println("Please enter a valid value");
+                        }
                         if (checkAction == 1){
                             System.out.println(user);
                         }
@@ -156,7 +177,7 @@ public class Main {
                         }
                     }
                     case 3 -> {
-                        int healAmount = (int) (Math.random() * (user.getStat("maxHp") * 0.2) + (user.getStat("maxHp") * 0.1));
+                        int healAmount = (int) (Math.random() * (user.getStat("maxHp") * 0.5) + (user.getStat("maxHp") * 0.1));
                         user.damageTaken(healAmount * -1);
                         System.out.println(user.getName() + " healed for " + healAmount + "!");
                         actionDone = true;
@@ -166,7 +187,7 @@ public class Main {
                         System.out.println("Fighting allows you to select a move from your movepool");
                         System.out.println("You can see the stats of yourself or the enemy when using \"check\"");
                         System.out.println("After you defeat each enemy you can select an upgrade, which can buff or reduce your stats, as well as give you moves");
-                        System.out.println("\"Heal\" heals you for between 10% and 30% of your max hp");
+                        System.out.println("\"Heal\" heals you for between 10% and 60% of your max hp");
                         System.out.println("Best of wishes, and lets see how far you can go in Infinite-E!");
                     }
 
@@ -270,35 +291,47 @@ public class Main {
                     int reward4Index = pickRandomReward(rewardMax);
                     // prints out rewards and data to user
                     System.out.println("Which reward would you like?");
+                    System.out.println("0. No reward");
                     System.out.println("1. " + upgradeInfo(rewardName[reward1Index], rewardData[reward1Index]));
                     System.out.println("2. " + upgradeInfo(rewardName[reward2Index], rewardData[reward2Index]));
                     System.out.println("3. " + upgradeInfo(rewardName[reward3Index], rewardData[reward3Index]));
                     System.out.println("4. " + upgradeInfo(rewardName[reward4Index], rewardData[reward4Index]));
-
-                    int rewardSelect = Integer.parseInt(s.nextLine());
-                    // applies upgrade and subtracts max by 1
-                    switch (rewardSelect){
-                        case 1 -> {
-                            System.out.println("You got " + rewardName[reward1Index] + "!");
-                            applyUpgrade(user, rewardData[reward1Index]);
-                            rewardMax[reward1Index]--;
+                    System.out.println("You currently are at " + user.getHpFraction() + ", " + user.getStat("atk") + " atk, " + user.getStat("defence") + " defence, " + user.getStat("speed") + " speed");
+                    System.out.println("IF YOU GET AN ITEM THAT REDUCES YOUR MAX HP TO 0 OR LOWER THE RUN WILL END!");
+                    int rewardSelect = -1;
+                    while (rewardSelect < 0 || rewardSelect > 4){
+                        // makes it so the program isn't stopped when an invalid value is entered
+                        try{
+                            rewardSelect = Integer.parseInt(s.nextLine());
                         }
-                        case 2 -> {
-                            System.out.println("You got " + rewardName[reward2Index] + "!");
-                            applyUpgrade(user, rewardData[reward2Index]);
-                            rewardMax[reward2Index]--;
+                        catch (Exception e){
+                            System.out.println("Please enter a valid value");
                         }
-                        case 3 -> {
-                            System.out.println("You got " + rewardName[reward3Index] + "!");
-                            applyUpgrade(user, rewardData[reward3Index]);
-                            rewardMax[reward3Index]--;
-                        }
-                        case 4 -> {
-                            System.out.println("You got " + rewardName[reward4Index] + "!");
-                            applyUpgrade(user, rewardData[reward4Index]);
-                            rewardMax[reward4Index]--;
+                        // applies upgrade and subtracts max by 1
+                        switch (rewardSelect){
+                            case 1 -> {
+                                System.out.println("You got " + rewardName[reward1Index] + "!");
+                                applyUpgrade(user, rewardData[reward1Index]);
+                                rewardMax[reward1Index]--;
+                            }
+                            case 2 -> {
+                                System.out.println("You got " + rewardName[reward2Index] + "!");
+                                applyUpgrade(user, rewardData[reward2Index]);
+                                rewardMax[reward2Index]--;
+                            }
+                            case 3 -> {
+                                System.out.println("You got " + rewardName[reward3Index] + "!");
+                                applyUpgrade(user, rewardData[reward3Index]);
+                                rewardMax[reward3Index]--;
+                            }
+                            case 4 -> {
+                                System.out.println("You got " + rewardName[reward4Index] + "!");
+                                applyUpgrade(user, rewardData[reward4Index]);
+                                rewardMax[reward4Index]--;
+                            }
                         }
                     }
+
                     // updates user moves
                     playerMoves = user.getMoves();
 

@@ -4,4 +4,4 @@ Goblin-Rider{[level: 2],[hp: 7],[atk: 3],[speed: 110],[defence: 2],[moves: dagge
 Skeleton{[level: 2],[hp: 5],[atk: 2],[speed: 95],[defence: 3],[moves: bow,stab,slice],[description: "A human skeleton"]}
 Spider{[level: 2],[hp: 4],[atk: 5],[speed: 110],[defence: 2],[moves: slice,bite,spider-dance],[description: "Australia vibes"]}
 Skeleton-Jockey{[level: 3],[hp: 10],[atk: 7],[speed: 110],[defence: 3],[moves: bow,stab,slice,bite],[description: "A skeleton riding a spider"]}
-Wolf{[level: 2],[hp: 5],[atk: 10],[speed: 105],[defence: 4],[moves: bite,big-bite],[description: "A skeleton riding a spider"]}
+Wolf{[level: 2],[hp: 5],[atk: 10],[speed: 105],[defence: 4],[moves: bite,big-bite],[description: "A wolf"]}

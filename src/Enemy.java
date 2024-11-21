@@ -66,10 +66,10 @@ public class Enemy {
     // scales enemy's stats based on the player's stats
     public void statScaling(int playerLevel, int playerMaxHp, int playerAttack, int playerDefence){
         level += (int) ((Math.random() * 0.6 + 0.5) * playerLevel);
-        maxHp += (int) ((Math.random() * 0.4 + 0.15) * (playerAttack / 15) * (playerMaxHp / 1.5) * (level / 2));
+        maxHp += (int) ((Math.random() * 0.4 + 0.15) * (playerAttack / 15.0) * (level / 2.0));
         hp = maxHp;
-        defence += (int) (Math.random() * 0.3 + 0.4) * (playerAttack / 10) * (playerDefence / 2) * (level / 2.5);
-        atk += (int) ((Math.random() * 0.4 + 0.85) * (playerLevel * (Math.random() * 0.5 + 0.1)) + (playerAttack * (Math.random() * 0.2 + 0.5))) * (level / 3.5);
+        defence += (int) (Math.random() * 0.3 + 0.4) * (playerAttack / 10.0) * (level / 2.5);
+        atk += (int) ((Math.random() * 0.4 + 0.85) * (playerLevel * (Math.random() * 0.5 + 0.1)) + ((playerDefence / 25.0) * (Math.random() * 0.2 + 0.5)) / ((playerMaxHp / 15.0) * (Math.random() * 0.2 + 0.5)) + 1) * (level / 3.5);
     }
 
     // returns a string of all the enemy's stats
