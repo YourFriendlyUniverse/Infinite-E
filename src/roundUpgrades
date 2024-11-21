@@ -46,4 +46,4 @@ Brick{[stat: (atk,10),(speed,-5)]}
 Chilli-Pepper{[stat: (atk,15),(speed,10),(maxHp,-5),(defence,-5)]}
 Big-Stick{[stat: (atk,5)],[max: 1],[move: stick-smack]}
 Book-Of-Jokes{[stat: (atk,10),(defence,-1)],[max: 1],[move: vicious-mockery]}
-Nail{[stat: (atk,10),(speed,5)],[max: 1],[move: nail-slap]}
+Nail{[stat: (atk,10),(speed,5)],[max: 1],[move: nail-slash]}
