@@ -8,11 +8,13 @@ public class Player {
     private int defence;
     private int exp;
     private int level;
+    private int nextLevelExpRequired;
     private String name;
     private ArrayList<String> moves;
 
     public Player(String name){
         this.name = name;
+
         maxHp = 20;
         hp = maxHp;
         speed = 100;
@@ -22,6 +24,7 @@ public class Player {
         level = 1;
         moves = new ArrayList<>();
         moves.add("slap");
+        nextLevelExpRequired = (int) (level * 1.15 + Math.pow(level, 1.1) + 100);
     }
 
     // reduces the hp by the damage
@@ -63,7 +66,13 @@ public class Player {
                 return maxHp;
             }
             case "atk" -> {
-                return atk;
+                if (atk <= 0){
+                    return 1;
+                }
+                else{
+                    return atk;
+                }
+
             }
             case "speed" -> {
                 return speed;
@@ -93,9 +102,14 @@ public class Player {
         moves.add(move);
     }
 
-    // increases the exp of the player by the amount
+    // increases the exp of the player by the amount and levels up the player
     public void expIncrease(int amount){
         exp += amount;
+        while (exp > nextLevelExpRequired){
+            level += 1;
+            exp -= nextLevelExpRequired;
+            nextLevelExpRequired = (int) (level * 1.15 + Math.pow(level, 1.1) + 100);
+        }
     }
 
     // returns the player's name

@@ -1,5 +1,3 @@
-import jdk.jshell.Snippet;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -98,8 +96,9 @@ public class Main {
         // System.out.println(moveDescription("slice", moveNames, moveResults));
         // System.out.println(moveDescription("slime-spit", moveNames, moveResults));
         // System.out.println(moveDescription("recoil-strike", moveNames, moveResults));
-//        System.out.println(upgradeInfo(rewardName[1], rewardData[1]));
-//        System.out.println("1. " + upgradeInfo(rewardName[1], rewardData[1]));
+        // System.out.println(upgradeInfo(rewardName[1], rewardData[1]));
+        // System.out.println("1. " + upgradeInfo(rewardName[1], rewardData[1]));
+        // System.out.println(currentEnemy.giveExp());
         // end of tests
 
         // ## Main Loop ##
@@ -111,7 +110,7 @@ public class Main {
             // if the game hasn't ended
             else{
                 // player action selection
-                System.out.println("==================================\nWhat would you like to do?\n1. Fight\n2. Check\n3. Heal\n4. Mercy");
+                System.out.println("==================================\nWhat would you like to do?\n1. Fight\n2. Check\n3. Heal\n4. Help");
                 int input = Integer.parseInt(s.nextLine());
                 boolean actionDone = false;
                 boolean playerUsedMove = false;
@@ -119,7 +118,6 @@ public class Main {
                 String enemyMoveSelectedString;
                 int enemyMoveSelectedIndex = 0;
                 boolean roundAdvance = false;
-                int nextLevelExpRequired = (int) (user.getStat("level") * 1.15 + Math.pow(user.getStat("level"), 1.1) + 100);
                 switch(input){
                     case 1 -> {
                         // using a move
@@ -158,13 +156,18 @@ public class Main {
                         }
                     }
                     case 3 -> {
-                        int healAmount = (int) (Math.random() * (user.getStat("maxHp") * 0.70) + (user.getStat("maxHp") * 0.15));
+                        int healAmount = (int) (Math.random() * (user.getStat("maxHp") * 0.2) + (user.getStat("maxHp") * 0.1));
                         user.damageTaken(healAmount * -1);
                         System.out.println(user.getName() + " healed for " + healAmount + "!");
                         actionDone = true;
                     }
                     case 4 -> {
-                        System.out.println("lol this isn't Undertale");
+                        System.out.println("Enter in a number to select your options");
+                        System.out.println("Fighting allows you to select a move from your movepool");
+                        System.out.println("You can see the stats of yourself or the enemy when using \"check\"");
+                        System.out.println("After you defeat each enemy you can select an upgrade, which can buff or reduce your stats, as well as give you moves");
+                        System.out.println("\"Heal\" heals you for between 10% and 30% of your max hp");
+                        System.out.println("Best of wishes, and lets see how far you can go in Infinite-E!");
                     }
 
                 }
@@ -183,7 +186,7 @@ public class Main {
                     // checks who goes first and prints out what happens during a turn
                     if (currentEnemy.getStat("speed") > user.getStat("speed")){
                         // calculates how much damage the enemy did to the player
-                        int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                        int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), user.getStat("defence"));
                         // updates player hp
                         user.damageTaken(playerDamageTaken);
                         System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
@@ -192,7 +195,7 @@ public class Main {
                         // check player hp
                         if (user.getStat("hp") > 0) {
                             // calculates how much damage the player does to the enemy
-                            int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), user.getStat("defence"));
+                            int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), currentEnemy.getStat("defence"));
                             System.out.println(user.getName() + " used " + moveNames[playerMoveSelectedIndex] + "!");
                             System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
                             // update enemy hp
@@ -202,7 +205,7 @@ public class Main {
                     }
                     else{
                         // calculates how much damage the player does to the enemy
-                        int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), user.getStat("defence"));
+                        int enemyDamageTaken = damageDone(user.getStat("level"), user.getStat("atk"), moveDamage(moveResults[playerMoveSelectedIndex]), currentEnemy.getStat("defence"));
                         System.out.println(user.getName() + " used " + moveNames[playerMoveSelectedIndex] + "!");
                         System.out.println(user.getName() + " did " + enemyDamageTaken + " damage!");
                         // update enemy hp
@@ -211,7 +214,7 @@ public class Main {
                         // check enemy hp
                         if (currentEnemy.getStat("hp") > 0){
                             // calculates how much damage the enemy does to the player
-                            int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                            int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), user.getStat("defence"));
                             user.damageTaken(playerDamageTaken);
                             System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
                             System.out.println(currentEnemy.getName() + " did " + playerDamageTaken + " damage!" );
@@ -255,6 +258,9 @@ public class Main {
                 if (roundAdvance){
                     // congrats
                     System.out.println("You defeated the " + currentEnemy.getName() + "!");
+                    int playerExpGained = (int) (currentEnemy.giveExp() * (Math.log10(Math.pow(0.95, encounterCount) + Math.pow(1.1, encounterCount)) + 1));
+                    user.expIncrease(playerExpGained);
+                    System.out.println("You got " + playerExpGained + " exp!");
                     System.out.println("Round advance!");
                     System.out.println("==================================");
                     // select 1 of 4 random upgrade items whose max is not 0
@@ -273,18 +279,22 @@ public class Main {
                     // applies upgrade and subtracts max by 1
                     switch (rewardSelect){
                         case 1 -> {
+                            System.out.println("You got " + rewardName[reward1Index] + "!");
                             applyUpgrade(user, rewardData[reward1Index]);
                             rewardMax[reward1Index]--;
                         }
                         case 2 -> {
+                            System.out.println("You got " + rewardName[reward2Index] + "!");
                             applyUpgrade(user, rewardData[reward2Index]);
                             rewardMax[reward2Index]--;
                         }
                         case 3 -> {
+                            System.out.println("You got " + rewardName[reward3Index] + "!");
                             applyUpgrade(user, rewardData[reward3Index]);
                             rewardMax[reward3Index]--;
                         }
                         case 4 -> {
+                            System.out.println("You got " + rewardName[reward4Index] + "!");
                             applyUpgrade(user, rewardData[reward4Index]);
                             rewardMax[reward4Index]--;
                         }
@@ -295,6 +305,7 @@ public class Main {
                     // generates the next enemy and tells user what the enemy is
                     int randEnemy = (int) (Math.random() * enemies.length);
                     currentEnemy = selectEnemy(randEnemy, enemies);
+                    currentEnemy.statScaling(user.getStat("level"), user.getStat("maxHp"), user.getStat("atk"), user.getStat("defence"));
                     System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
                 }
             }
