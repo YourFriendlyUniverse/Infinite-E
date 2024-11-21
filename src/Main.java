@@ -8,9 +8,9 @@ public class Main {
         Scanner s = new Scanner(System.in);
 
         // player welcome and name selection
-//        System.out.print("Welcome player to Infinite E, please type your name: ");
-//        String name = s.nextLine();
-        Player user = new Player("player");
+        System.out.print("Welcome player to Infinite E, please type your name: ");
+        String name = s.nextLine();
+        Player user = new Player(name);
 
         // ##variable and class initialization##
   
