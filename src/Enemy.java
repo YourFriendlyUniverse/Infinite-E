@@ -27,9 +27,9 @@ public class Enemy {
         return moves[(int) (Math.random() * moves.length)];
     }
 
-    // gives exp, randomized by a multiplier of 0.85 to 1 (inclusive)
+    // gives exp, randomized by a multiplier of 0.85 to 1.15 (inclusive)
     public int giveExp(){
-        return (int) ((((double) (level * 10) / 25) + (2 * atk) + (defence * maxHp) / level + 2) * (Math.round((Math.random() * 0.15 + 0.85) * 100) / (double) 100));
+        return (int) ((((double) (level * 10) / 25) + (2 * atk) + (defence * maxHp) / (level / 5.5) + 2) * (Math.round((Math.random() * 0.30 + 0.85) * 100) / (double) 100));
     }
 
     // returns a string of the enemy's current hp over their max hp
@@ -66,9 +66,9 @@ public class Enemy {
     // scales enemy's stats based on the player's stats
     public void statScaling(int playerLevel, int playerMaxHp, int playerAttack, int playerDefence){
         level += (int) ((Math.random() * 0.6 + 0.5) * playerLevel);
-        maxHp += (int) ((Math.random() * 0.4 + 0.15) * (playerAttack / 15.0) * (level / 2.0));
+        maxHp += (int) ((Math.random() * 0.2 + 0.35) * (playerAttack / 8.0) * (level / 2.0));
         hp = maxHp;
-        defence += (int) (Math.random() * 0.3 + 0.4) * (playerAttack / 10.0) * (level / 2.5);
+        defence += (int) (Math.random() * 0.3 + 0.6) * (playerAttack / 2.0) * (level / 2.5);
         atk += (int) ((Math.random() * 0.4 + 0.85) * (playerLevel * (Math.random() * 0.5 + 0.1)) + ((playerDefence / 25.0) * (Math.random() * 0.2 + 0.5)) / ((playerMaxHp / 15.0) * (Math.random() * 0.2 + 0.5)) + 1) * (level / 3.5);
     }
 

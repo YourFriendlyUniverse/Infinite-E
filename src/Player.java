@@ -43,7 +43,7 @@ public class Player {
         switch (stat) {
             case "maxHp" -> {
                 maxHp += amount;
-                if (hp > maxHp){
+                if (hp >= maxHp){
                     hp = maxHp;
                 }
                 else{
@@ -102,11 +102,22 @@ public class Player {
         moves.add(move);
     }
 
-    // increases the exp of the player by the amount and levels up the player
+    // increases the exp of the player by the amount and levels up the player and gives stat buffs
     public void expIncrease(int amount){
         exp += amount;
         while (exp > nextLevelExpRequired){
             level += 1;
+            // selects and increases a random stat
+            int randStatIncrease = (int) (Math.random() * 4);
+            switch (randStatIncrease){
+                case 0 -> {
+                    maxHp += 2;
+                    hp += 2;
+                }
+                case 1 -> defence += 1;
+                case 2 -> speed += 1;
+                case 3 -> atk += 1;
+            }
             exp -= nextLevelExpRequired;
             nextLevelExpRequired = (int) (level * 1.15 + Math.pow(level, 1.1) + 100);
         }

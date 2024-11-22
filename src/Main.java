@@ -110,7 +110,7 @@ public class Main {
             // if the game hasn't ended
             else{
                 // player action selection
-                System.out.println("==================================\nWhat would you like to do?\n1. Fight\n2. Check\n3. Heal\n4. Help");
+                System.out.println("==================================\nWhat would you like to do?\n1. Fight\n2. Check\n3. Heal\n4. Info");
                 int input = 0;
                 // makes it so the program doesn't stop when an invalid value is entered
                 try {
@@ -146,7 +146,7 @@ public class Main {
                         moveInput--;
 
                         // uses the move if it corresponds to a move the user can make
-                        if (moveInput <= user.getStat("movesLength") && moveInput >= 0){
+                        if (moveInput <= user.getStat("movesLength") - 1 && moveInput >= 0){
                             // gets the global id of the move
                             for (int i = 0; i < moveNames.length; i++){
                                 if (moveNames[i].contains(playerMoves[moveInput])){
@@ -183,11 +183,11 @@ public class Main {
                         actionDone = true;
                     }
                     case 4 -> {
-                        System.out.println("Enter in a number to select your options");
                         System.out.println("Fighting allows you to select a move from your movepool");
                         System.out.println("You can see the stats of yourself or the enemy when using \"check\"");
                         System.out.println("After you defeat each enemy you can select an upgrade, which can buff or reduce your stats, as well as give you moves");
                         System.out.println("\"Heal\" heals you for between 10% and 60% of your max hp");
+                        System.out.println("When you level up, a one of your stats will be randomly buffed");
                         System.out.println("Best of wishes, and lets see how far you can go in Infinite-E!");
                     }
 
@@ -258,7 +258,7 @@ public class Main {
                 }      
                 else if (actionDone){
                     // calculates how much damage the enemy did to the player
-                    int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), currentEnemy.getStat("defence"));
+                    int playerDamageTaken = damageDone(currentEnemy.getStat("level"), currentEnemy.getStat("atk"), moveDamage(moveResults[enemyMoveSelectedIndex]), user.getStat("defence"));
                     // updates player hp
                     user.damageTaken(playerDamageTaken);
                     System.out.println(currentEnemy.getName() + " used " + enemyMoveSelectedString + "!");
@@ -336,8 +336,19 @@ public class Main {
                     playerMoves = user.getMoves();
 
                     // generates the next enemy and tells user what the enemy is
+                    boolean regenerateEnemy = true;
                     int randEnemy = (int) (Math.random() * enemies.length);
-                    currentEnemy = selectEnemy(randEnemy, enemies);
+                    // continuously regenerates the enemy, checking if the enemy's base level is 1.15 times the player's level and not generating it otherwise it would be too powerful
+                    while (regenerateEnemy){
+                        regenerateEnemy = false;
+                        currentEnemy = selectEnemy(randEnemy, enemies);
+                        if (currentEnemy.getStat("level") > user.getStat("level") * 1.15){
+                            regenerateEnemy = true;
+                            randEnemy = (int) (Math.random() * enemies.length);
+                        }
+                    }
+
+
                     currentEnemy.statScaling(user.getStat("level"), user.getStat("maxHp"), user.getStat("atk"), user.getStat("defence"));
                     System.out.println("Round: " + encounterCount + "!\nEnemy: " + currentEnemy.getName());
                 }
@@ -482,7 +493,7 @@ public class Main {
     
     // returns the amount of damage a move does
     public static int damageDone(int attackerLevel, int attackerAtk, int movePower,int defenderDefence){
-        double modifier = (Math.round((Math.random() * 0.30 + 0.85) * 100) / (double) 100); // randomized value from 0.85 to 1.15 (inclusive)
+        double modifier = (Math.round((Math.random() * 0.15 + 0.85) * 100) / (double) 100); // randomized value from 0.85 to 1 (inclusive)
         if (movePower > 0){
             return (int) (((((2 * attackerLevel) / 5 + 2 ) * movePower * (attackerAtk / defenderDefence)) / 25) + 2 * modifier);
         }
