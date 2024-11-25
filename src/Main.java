@@ -357,7 +357,7 @@ public class Main {
 
         // game end
         System.out.println("Good job " + user.getName() + "!\nYou made it through " + encounterCount + " encounters!");
-        System.out.println(currentEnemy);
+//        System.out.println(currentEnemy);
 
         s.close();
     }
