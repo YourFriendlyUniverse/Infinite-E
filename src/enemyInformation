@@ -7,5 +7,5 @@ Skeleton-Jockey{[level: 3],[hp: 10],[atk: 7],[speed: 110],[defence: 3],[moves: b
 Wolf{[level: 2],[hp: 5],[atk: 10],[speed: 105],[defence: 4],[moves: bite,big-bite],[description: "A wolf"]}
 Pink-Slime{[level: 4],[hp: 10],[atk: 15],[speed: 105],[defence: 5],[moves: slime-spit,slap],[description: "A slime, but pink"]}
 Comedy-Masks{[level: 10],[hp: 20],[atk: 20],[speed: 200],[defence: 1],[moves: vicious-mockery,insanity,laughter],[description: "Floating theater masks"]}
-Golem{[level: 7],[hp: 40],[atk: 20],[speed: 5],[defence: 30],[moves: slam,big-slam],[description: "A rock golem]}
-Black-Hole{[level: 110],[hp: 150],[atk: 2000],[speed: 217],[defence: 100],[moves: nothing],[description: "Just kinda chills there"]}
+Golem{[level: 7],[hp: 40],[atk: 10],[speed: 5],[defence: 30],[moves: slam,big-slam],[description: "A rock golem]}
+Black-Hole{[level: 110],[hp: 10],[atk: 2000],[speed: 217],[defence: 10],[moves: nothing],[description: "Just kinda chills there"]}
