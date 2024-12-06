@@ -361,7 +361,12 @@ public class Main {
 
         s.close();
     }
-    // file reader
+
+    /**
+     * The getFileData method reads a file, and returns an ArrayList of strings, each index being a new line within the file it read
+     * @param fileName The name of the file to be read
+     * @return The data of the file in an ArrayList, each new index being a line within the file
+     */
     public static ArrayList<String> getFileData(String fileName) {
         ArrayList<String> fileData = new ArrayList<String>();
         try {
@@ -378,7 +383,12 @@ public class Main {
         }
     }
 
-    // parses the string of effects and returns the move damage
+    /**
+     * The moveDamage method gets the amount of power (indicated by enemy_damage within the files) the move has
+     * Used in displaying the move stats, and when performing damage calculations
+     * @param moveOutcomes The outcomes of the move, including its power and description
+     * @return The amount of power the move does
+     */
     public static int moveDamage(String moveOutcomes){
         String[] moveResults = moveOutcomes.split(",");
         // loops through all the move effects
@@ -393,6 +403,14 @@ public class Main {
     }
 
     // returns an Enemy class of the enemy, with all its stats, at the index number listed inside the enemy list
+
+    /**
+     * The selectEnemy method returns an enemy class, given the index of the enemy to be chosen, and the array of all the enemys which are currently within the game
+     * It parses the String with all the enemy data, separating them into the variables to be used within the enemy class
+     * @param enemyNumber The index number of the enemy within the EnemyInformation file, starts at 0
+     * @param enemyList An array of all the enemies within the EnemyInformation file
+     * @return An enemy class, to be used within the main gameplay loop and fought against
+     */
     public static Enemy selectEnemy(int enemyNumber, String[] enemyList){
         String enemyInfo = enemyList[enemyNumber];
 
