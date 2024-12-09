@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * The player is the user who is playing the game. The player has a max hp, hp, speed, attack, defence, exp, level the exp required for the next level, name, and move pool.
+ *
+ */
 public class Player {
     private int maxHp;
     private int hp;
@@ -12,6 +16,12 @@ public class Player {
     private String name;
     private ArrayList<String> moves;
 
+    /**
+     * Constructor for the Player class, creates a new instance of a player given the below parameters.
+     * The player stats off at level 1, with 20 hp and max hp, 100 speed, 20 attack, 5 defence, 0 experience, and knowing the move slap
+     * The experience required for the next level is dependent on the player's level
+     * @param name The name of the player, inputted by the user
+     */
     public Player(String name){
         this.name = name;
 
@@ -27,7 +37,10 @@ public class Player {
         nextLevelExpRequired = (int) (level * 1.15 + Math.pow(level, 1.1) + 100);
     }
 
-    // reduces the hp by the damage
+    /**
+     * Reduces the hp by damage, can be used to heal as well when the damage is negative
+     * @param damage The amount of damage the player takes, can heal if the damage is negative
+     */
     public void damageTaken(int damage){
         if (hp - damage > maxHp){
             hp = maxHp;
@@ -39,6 +52,13 @@ public class Player {
     }
 
     // updates the specified stat
+
+    /**
+     * Updates the stats of the player, adds amount to the current stat value, specified by the stat parameter
+     * Prerequisite that stat is the name of a valid stat
+     * @param stat The name of the stat to be changed
+     * @param amount The amount the stat will change by, will increase by that amount if positive, and be reduced if negative
+     */
     public void updateStat(String stat, int amount){
         switch (stat) {
             case "maxHp" -> {
@@ -56,7 +76,13 @@ public class Player {
         }
     }
 
-    // returns the specified stat of the player
+    /**
+     * Returns the integer value of the stat specified, where it won't return a value smaller than 1 for attack and defence
+     * Doesn't return below 1 for attack and defence, as it would mess up the prerequisites for the damage calculation
+     * Prerequisite that stat is the name of a valid stat
+     * @param stat The name of the stat
+     * @return The value of the stat, with constraints on attack and defence
+     */
     public int getStat(String stat){
         switch (stat) {
             case "hp" -> {
@@ -98,11 +124,20 @@ public class Player {
         }
     }
 
+    /**
+     * Adds the name of the move to the player's move pool
+     * Prerequisite that move is a valid move name
+     * @param move The name of the move to be added to the player's move pool
+     */
     public void addMove(String move){
         moves.add(move);
     }
 
-    // increases the exp of the player by the amount and levels up the player and gives stat buffs
+    /**
+     * Increases the player's exp, and checks if they can level up, also randomly increasing one of the player's stats when they do level up
+     * Prerequisite that amount is positive, and that nextLevelExpRequired is positive and non-zero
+     * @param amount The amount of exp the player obtained
+     */
     public void expIncrease(int amount){
         exp += amount;
         while (exp > nextLevelExpRequired){
@@ -124,6 +159,11 @@ public class Player {
     }
 
     // returns the player's name
+
+    /**
+     * Getter method, returns the player's name
+     * @return The player's name
+     */
     public String getName(){
         return name;
     }

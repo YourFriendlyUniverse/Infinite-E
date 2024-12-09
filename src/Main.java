@@ -364,6 +364,7 @@ public class Main {
 
     /**
      * The getFileData method reads a file, and returns an ArrayList of strings, each index being a new line within the file it read
+     * Prerequisite that the file that is asked to be read exists
      * @param fileName The name of the file to be read
      * @return The data of the file in an ArrayList, each new index being a line within the file
      */
@@ -402,11 +403,10 @@ public class Main {
         return 0;
     }
 
-    // returns an Enemy class of the enemy, with all its stats, at the index number listed inside the enemy list
-
     /**
-     * The selectEnemy method returns an enemy class, given the index of the enemy to be chosen, and the array of all the enemys which are currently within the game
+     * The selectEnemy method returns an enemy class, given the index of the enemy to be chosen, and the array of all the enemies which are currently within the game
      * It parses the String with all the enemy data, separating them into the variables to be used within the enemy class
+     * Prerequisite of the index number being between 0 and the max index of the enemy list
      * @param enemyNumber The index number of the enemy within the EnemyInformation file, starts at 0
      * @param enemyList An array of all the enemies within the EnemyInformation file
      * @return An enemy class, to be used within the main gameplay loop and fought against
@@ -465,12 +465,28 @@ public class Main {
         return new Enemy(name, level, hp, speed, atk, defence, moves, description);
     }
 
-    // returns the stat value (prerequisite that name is contained in stat)
+    /**
+     * Used to get the value of the stats from the enemies information
+     * Prerequisite that the stat name is within the enemy's information
+     * @param name Name of the stat that's going to be parsed
+     * @param stat String of the enemy's stats
+     * @return The integer value of the stat that is stored within the enemy's information
+     */
     public static int parseStat(String name, String stat){
         return Integer.parseInt(stat.substring(stat.indexOf(name + ": ") + name.length() + 2));
     }
 
     // returns a string with the move and its description
+
+    /**
+     * Finds the move, and its power, and returns a String with the move name and its power and description
+     * Prerequisite that the move name is contained within moveNames, and that every index of move name corresponds to that move's results within moveOutcomes
+     * If the move name isn't in the array of moveNames, it instead returns the String "Error Description not found"
+     * @param move The move name
+     * @param moveNames Array of all the move names
+     * @param moveOutcomes Array of all the move's powers and description
+     * @return A String with the move name and its description
+     */
     public static String moveDescription(String move, String[] moveNames, String[] moveOutcomes){
         int index = 0;
         // finds the move's index to use
@@ -509,8 +525,17 @@ public class Main {
         }
         return "Error Description not found";
     }
-    
-    // returns the amount of damage a move does
+
+    /**
+     * Returns the amount of damage done, given the attacker's level, attack, power of the move they used, and the defender's defence
+     * Prerequisite that the defence is greater than 0, so there isn't a divide by 0 error or a negative fraction
+     * Prerequisite that the attacker's level, attack, and power of the move are non-negative numbers, as if they were negative, negative damage would be done
+     * @param attackerLevel The level of the attacker
+     * @param attackerAtk The attack stat of the attacker
+     * @param movePower The power of the move they used
+     * @param defenderDefence The defence stat of the defender
+     * @return The amount of damage done
+     */
     public static int damageDone(int attackerLevel, int attackerAtk, int movePower,int defenderDefence){
         double modifier = (Math.round((Math.random() * 0.15 + 0.85) * 100) / (double) 100); // randomized value from 0.85 to 1 (inclusive)
         if (movePower > 0){
@@ -519,7 +544,14 @@ public class Main {
         return 0;
     }
 
-    // returns a string that has all the info of the upgrade
+    /**
+     * Returns all the info of an upgrade, including its name, stat changes and what move(s) it gives
+     * Prerequisite that upgrade data is in the format of [move: MOVE],[stat: (STATNAME,x),],[max: x]
+     * where x is an integer, MOVE is the name of a valid move, and STATNAME is the name of a valid stat
+     * @param upgradeName The name of the upgrade
+     * @param upgradeData The data of the upgrade (what move(s) it gives, and the stat changes)
+     * @return A String of the upgrade's name, and what effects it'll have on the player
+     */
     public static String upgradeInfo(String upgradeName, String upgradeData){
         String returnString = upgradeName;
         // splits and standardizes by removing last and first brackets
@@ -554,7 +586,12 @@ public class Main {
         return returnString;
     }
 
-    // returns a random reward which can still be picked
+    /**
+     * Picks a random, valid reward, whose max is not 0
+     * Prerequisite that the rewardMax array is greater than length 0, and has an integer within it which is greater than 0
+     * @param rewardMax An array of all the rewards' max times the player can obtain that upgrade, with each index corresponding to a specific move
+     * @return The index of the move randomly selected
+     */
     public static int pickRandomReward(int[] rewardMax){
         int index = (int) (Math.random() * rewardMax.length);
         // refreshes until it picks a reward that it can give
@@ -565,6 +602,13 @@ public class Main {
     }
 
     // applies the upgrade to the player's stats and adds any moves
+
+    /**
+     * Apply the upgrade to the player, changing their stats, and move pool according to the upgrade's specifications
+     * Prerequisite that the upgrade data has valid stat names and integer values, and if it has a move/moves, it has a valid move name
+     * @param player The player object
+     * @param upgradeData The data of the upgrade, which contains the
+     */
     public static void applyUpgrade(Player player, String upgradeData){
         // splits and standardizes the data
         String[] data = upgradeData.split("],\\[");
