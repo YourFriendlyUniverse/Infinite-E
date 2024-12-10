@@ -158,8 +158,6 @@ public class Player {
         }
     }
 
-    // returns the player's name
-
     /**
      * Getter method, returns the player's name
      * @return The player's name
@@ -168,7 +166,11 @@ public class Player {
         return name;
     }
 
-    // returns an array of all the player's moves' names
+
+    /**
+     * Getter method, returns a string array of all the player's moves, so the player knows what moves they have
+     * @return A String array of all the player's moves
+     */
     public String[] getMoves(){
         String[] moveNames = new String[moves.toArray().length];
         for (int i = 0; i < moveNames.length; i++){
@@ -178,10 +180,20 @@ public class Player {
     }
 
     // returns player's current hp as a fraction of their max hp
+
+    /**
+     * The getHpFraction method returns a String which is a fraction of the player's current hp over their max hp
+     * @return A String of the player's current hp over their max hp
+     */
     public String getHpFraction(){
         return getStat("hp") + "/" + maxHp + " Hp";
     }
 
+    /**
+     * The toString method returns all the info about the player, excluding their moves
+     * Used when the player checks themselves
+     * @return A string of all the player's variables (except the moves), and their values
+     */
     public String toString(){
         return "\"" + name + "\"\nLevel: " + level + "\nExp: " + exp + "\nHealth: " + getHpFraction() + "\nAtk: " + atk + "\nDefence: " + defence + "\nSpeed: "  + speed + "\n\"You, The player\"";
     }
